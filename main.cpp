@@ -16,6 +16,16 @@ class Cshell {
 			}
 		}
 	}
+	void cleanBoard()
+	{
+		isPlayerX = true;
+		winnerExists = false;
+		for(int i=0;i<3;i++){
+			for(int j=0;j<3;j++){
+				board[i][j] = " ";
+			}
+		}
+	}
 	int makeMove(int x, int y) // 1-3, 0-2
 	{
 		x--;y--;
@@ -58,11 +68,18 @@ class Cshell {
 		if(board[0][2] != " " && board[0][2] == board[1][1] && board[2][0] == board[1][1] )
 			return board[0][2];
 
-		return "none";
+		for(int i=0;i<3;i++){
+			for(int j=0;j<3;j++){
+				if(board[i][j] == " ")
+					return "none";
+			}
+		}
+		return "draw";
 	}
 
 	void draw()
 	{
+		system("cls");
 		std::cout << " "<< board[0][0] <<" | "<< board[0][1] <<" | "<< board[0][2] <<" "<<std::endl;
 		std::cout << "---|---|---" << std::endl;
 		std::cout << " "<< board[1][0] <<" | "<< board[1][1] <<" | "<< board[1][2] <<" "<<std::endl;
@@ -70,9 +87,24 @@ class Cshell {
 		std::cout << " "<< board[2][0] <<" | "<< board[2][1] <<" | "<< board[2][2] <<" "<<std::endl;
 	}
 	void gameP1(){ // 1 player game logic
+		cleanBoard();
 		while (true){
 			draw();
 			
+			std::string winnerTmp = winner();
+			//std::cout << winnerTmp << std::endl;
+			if(winnerTmp == "X"){
+				std::cout << "The winner is Player X\n";
+				break;
+			}else if(winnerTmp == "O"){
+				std::cout << "The winner is Player O\n";
+				break;
+			}else if(winnerTmp == "draw"){
+				std::cout << "---Draw---\n";
+				break;
+			}
+
+
 			int tmpR;
 			int tmpC;
 			std::cout << "input ROW : ";
@@ -86,14 +118,6 @@ class Cshell {
 				std::cin >> tmpC;
 			}
 
-			std::string winnerTmp = winner();
-			if(winnerTmp == "X"){
-				std::cout << "The winner is Player X\n";
-				break;
-			}else if(winnerTmp == "O"){
-				std::cout << "The winner is Player O\n";
-				break;
-			}
 		}
 	}
 	void menu(){
@@ -101,7 +125,7 @@ class Cshell {
 			std::string cho;
 			std::cout << "1. Single Player\n";
 			std::cout << "2. Two Player\n";
-			std::cout << "x. Exit !!\n";
+			std::cout << "x. Exit !!\nChoose your Option : ";
 	
 			std::cin >> cho;
 	
